@@ -4,71 +4,66 @@ import readline from "readline";
 let parking = new Parking();
 
 let prompt =
-    "Please choose an option [ p - Park a vehicle, u - Unpark a vehicle, m - Show map, h - Show history, x - exit ]:";
+  "Please choose an option [ p - Park a vehicle, u - Unpark a vehicle, m - Show map, h - Show history, x - exit ]:";
 
 const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt,
+  input: process.stdin,
+  output: process.stdout,
+  prompt,
 });
 
 rl.prompt();
 
 rl.on("line", (line) => {
-    switch (line.trim()) {
-        case "x":
-            rl.close();
-            break;
-        case "p":
-            rl.question("Vehicle size [ 0-S, 1-M, 2-L ]: ", function(size) {
-                rl.question(
-                    "Choose entrance [ 0-North, 1-West, 2-East ]",
-                    function(entrance) {
-                        rl.question("Type in your plate number: ", function(plateNumber) {
-                            parking.parkVehicle(size, entrance, plateNumber);
-                            parking.showMap();
-                            parking.showParkHistory();
-                            rl.prompt();
-                        });
-                    }
-                );
+  switch (line.trim()) {
+    case "x":
+      rl.close();
+      break;
+    case "p":
+      rl.question("Vehicle size [ 0-S, 1-M, 2-L ]: ", function (size) {
+        rl.question(
+          "Choose entrance [ 0-North, 1-West, 2-East ]",
+          function (entrance) {
+            rl.question("Type in your plate number: ", function (plateNumber) {
+              parking.parkVehicle(size, entrance, plateNumber);
+              parking.showMap();
+              parking.showParkHistory();
+              rl.prompt();
             });
+          }
+        );
+      });
 
-            break;
+      break;
 
-        case "u":
-            rl.question(
-                "Location of vehicle to unpark. Seperate by a space [row column]: ",
-                function(loc) {
-                    rl.question("Plate number: ", function(plateNumber) {
-                        let strLoc = loc.trim().split(" ");
+    case "u":
+      rl.question(
+        "Location of vehicle to unpark. Seperate by a space [row column]: ",
+        function (loc) {
+          rl.question("Plate number: ", function (plateNumber) {
+            let strLoc = loc.trim().split(" ");
 
-                        if (strLoc.length >= 2) {
-                            let row = strLoc[0];
-                            let col = strLoc[1];
-                            parking.unparkVehicle(row, col, plateNumber);
-                            console.log("Vehicle unparked!");
-                        }
-                    });
-                }
-            );
-            break;
-        case "m":
-            parking.showMap();
-            break;
-        case "h":
-            parking.showParkHistory();
-            break;
-        default:
-            break;
-    }
-    rl.prompt();
+            if (strLoc.length >= 2) {
+              let row = strLoc[0];
+              let col = strLoc[1];
+              parking.unparkVehicle(row, col, plateNumber);
+              console.log("Vehicle unparked!");
+            }
+          });
+        }
+      );
+      break;
+    case "m":
+      parking.showMap();
+      break;
+    case "h":
+      parking.showParkHistory();
+      break;
+    default:
+      break;
+  }
+  rl.prompt();
 }).on("close", () => {
-    console.log("Have a great day!");
-    process.exit(0);
-});
-
-rl.on("close", function() {
-    console.log("\nThank you! We are pleased to serve you.");
-    process.exit(0);
+  console.log("Goodbye!");
+  process.exit(0);
 });
